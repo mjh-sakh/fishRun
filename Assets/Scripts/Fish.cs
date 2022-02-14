@@ -5,18 +5,9 @@ using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
-
     public void PickUp()
     {
-        Destroy(GetComponent<GameObject>());
-    }
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        Destroy(GetComponent<GameObject>());
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        Destroy(GetComponent<GameObject>());
+        Debug.Log($"I am a Fish! My name is {gameObject.name}!");
+        Destroy(gameObject);
     }
 }
