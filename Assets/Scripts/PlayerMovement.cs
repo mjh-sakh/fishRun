@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Random = System.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -17,12 +18,13 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI score;
     private int fishCount = 0;
     [SerializeField] private GameObject pathMaker;
+    private Random rnd = new Random();
 
     // Start is called before the first frame update
     private void Start()
     {
         player = GetComponent<Rigidbody2D>();
-        MarkPath();
+        // MarkPath();
     }
 
     private void SetScore(int increment)
@@ -72,6 +74,11 @@ public class PlayerMovement : MonoBehaviour
         {
             PickUpFish();
             col.GetComponent<Fish>().PickUp();
+        }
+
+        if (col.CompareTag("icepatch"))
+        {
+            col.GetComponent<IcePatchMelt>().Melt(rnd.Next(500, 3000));
         }
     }
 
