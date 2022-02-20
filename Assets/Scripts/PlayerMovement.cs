@@ -1,24 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Random = System.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D player;
-
     // [SerializeField] private float playerMaxSpeed = 3f;
     [SerializeField] private float slowdownRate = 0.95f;
     [SerializeField] private Vector3 moveVal;
     public TextMeshProUGUI score;
-    private int fishCount = 0;
+    public TextMeshProUGUI health;
+    private int _healthValue;
+    private int _fishCount;
     [SerializeField] private GameObject pathMaker;
-    private Random rnd = new Random();
+    private readonly Random _rnd = new Random();
 
     // Start is called before the first frame update
     private void Start()
@@ -27,10 +24,16 @@ public class PlayerMovement : MonoBehaviour
         // MarkPath();
     }
 
+    private void UpdateHealth(int change)
+    {
+        _healthValue += change;
+        health.text = _healthValue.ToString();
+    }
+
     private void SetScore(int increment)
     {
-        fishCount += increment;
-        score.text = $"Fishes: {fishCount}";
+        _fishCount += increment;
+        score.text = $"Fishes: {_fishCount}";
     }
 
     // Update is called once per frame
@@ -50,7 +53,6 @@ public class PlayerMovement : MonoBehaviour
         player.AddForce(moveVal * 10, ForceMode2D.Force);
         player.velocity *= slowdownRate;
         // transform.position += playerMaxSpeed * moveVal * Time.deltaTime;
-        
     }
 
     private async Task MarkPath()
@@ -60,6 +62,14 @@ public class PlayerMovement : MonoBehaviour
             Instantiate(pathMaker, gameObject.transform);
             transform.DetachChildren();
             await Task.Delay(100);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("icepatch"))
+        {
+            UpdateHealth(-1);
         }
     }
 
@@ -78,7 +88,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (col.CompareTag("icepatch"))
         {
-            col.GetComponent<IcePatchMelt>().Melt(rnd.Next(500, 3000));
+            col.GetComponent<IcePatchMelt>().Melt(_rnd.Next(500, 3000));
+        UpdateHealth(1);
         }
     }
 
