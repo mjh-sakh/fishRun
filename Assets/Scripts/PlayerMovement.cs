@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private int _fishCount;
     [SerializeField] private GameObject pathMaker;
     private readonly Random _rnd = new Random();
+    public Animator animator;
 
     // Start is called before the first frame update
     private void Start()
@@ -39,6 +40,9 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        animator.SetFloat("Horizontal", moveVal.x);
+        animator.SetFloat("Vertical", moveVal.y);
+        animator.SetFloat("Speed", GetComponent<Rigidbody2D>().velocity.sqrMagnitude);
         // looks that slowdown & force multiplier & mass does the trick
         // player.velocity = Vector3.ClampMagnitude(player.velocity, playerMaxSpeed);
     }
